@@ -77,15 +77,17 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fdf0d5] via-white to-[#669bbc] flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl border-[#669bbc] shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-[#e0aaff] via-[#c77dff]/30 to-[#9d4edd]/20 flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl border-[#c77dff] shadow-xl">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Music className="h-8 w-8 text-[#780000]" />
-            <span className="text-2xl font-bold text-gray-900">NoteBridge</span>
+            <Music className="h-8 w-8 text-[#5a189a]" />
+            <span className="text-2xl font-bold text-[#10002b]">NoteBridge</span>
           </div>
-          <CardTitle className="text-2xl text-[#780000]">Create your account</CardTitle>
-          <CardDescription>Join our community of music learners and teachers</CardDescription>
+          <CardTitle className="text-2xl text-[#240046]">Create your account</CardTitle>
+          <CardDescription className="text-[#3c096c]">
+            Join our community of music learners and teachers
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -97,7 +99,7 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-[#780000]">
+                <Label htmlFor="firstName" className="text-[#3c096c]">
                   First Name
                 </Label>
                 <Input
@@ -105,12 +107,12 @@ export default function RegisterPage() {
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                   required
-                  className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                  className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-[#780000]">
+                <Label htmlFor="lastName" className="text-[#3c096c]">
                   Last Name
                 </Label>
                 <Input
@@ -118,13 +120,13 @@ export default function RegisterPage() {
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                   required
-                  className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                  className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-[#780000]">
+              <Label htmlFor="username" className="text-[#3c096c]">
                 Username
               </Label>
               <Input
@@ -132,12 +134,12 @@ export default function RegisterPage() {
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 required
-                className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[#780000]">
+              <Label htmlFor="email" className="text-[#3c096c]">
                 Email
               </Label>
               <Input
@@ -146,12 +148,12 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[#780000]">
+              <Label htmlFor="password" className="text-[#3c096c]">
                 Password
               </Label>
               <div className="relative">
@@ -161,13 +163,13 @@ export default function RegisterPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
-                  className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                  className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-[#fdf0d5] text-[#003049]"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-[#e0aaff]/50 text-[#5a189a]"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -177,11 +179,11 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="role" className="text-[#780000]">
+                <Label htmlFor="role" className="text-[#3c096c]">
                   Role
                 </Label>
                 <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
-                  <SelectTrigger className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]">
+                  <SelectTrigger className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -192,14 +194,14 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="instrument" className="text-[#780000]">
+                <Label htmlFor="instrument" className="text-[#3c096c]">
                   Instrument
                 </Label>
                 <Select
                   value={formData.instrument}
                   onValueChange={(value) => setFormData({ ...formData, instrument: value })}
                 >
-                  <SelectTrigger className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]">
+                  <SelectTrigger className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]">
                     <SelectValue placeholder="Select instrument" />
                   </SelectTrigger>
                   <SelectContent>
@@ -214,7 +216,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phoneNumber" className="text-[#780000]">
+              <Label htmlFor="phoneNumber" className="text-[#3c096c]">
                 Phone Number
               </Label>
               <Input
@@ -222,12 +224,12 @@ export default function RegisterPage() {
                 type="tel"
                 value={formData.phoneNumber}
                 onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio" className="text-[#780000]">
+              <Label htmlFor="bio" className="text-[#3c096c]">
                 Bio
               </Label>
               <Textarea
@@ -236,19 +238,19 @@ export default function RegisterPage() {
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 rows={3}
-                className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
               />
             </div>
 
-            <Button type="submit" className="w-full bg-[#780000] hover:bg-[#c1121f] text-white" disabled={loading}>
+            <Button type="submit" className="w-full bg-[#5a189a] hover:bg-[#7b2cbf] text-white" disabled={loading}>
               {loading ? "Creating account..." : "Create account"}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#3c096c]">
               Already have an account?{" "}
-              <Link href="/login" className="text-[#003049] hover:text-[#780000] hover:underline">
+              <Link href="/login" className="text-[#7b2cbf] hover:text-[#5a189a] hover:underline">
                 Sign in
               </Link>
             </p>

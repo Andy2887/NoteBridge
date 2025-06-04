@@ -90,29 +90,29 @@ export default function CreateLessonPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fdf0d5] to-[#669bbc]">
+    <div className="min-h-screen bg-gradient-to-br from-[#e0aaff] via-[#c77dff]/30 to-[#9d4edd]/20">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-[#669bbc]">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-[#c77dff]">
         <div className="container mx-auto px-4 py-4 flex items-center space-x-4">
           <Link href="/dashboard">
-            <Button variant="ghost" size="sm" className="text-[#780000] hover:bg-[#fdf0d5]">
+            <Button variant="ghost" size="sm" className="text-[#5a189a] hover:bg-[#e0aaff]/50">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Button>
           </Link>
           <div className="flex items-center space-x-2">
-            <Calendar className="h-6 w-6 text-[#780000]" />
-            <h1 className="text-xl font-semibold text-[#780000]">Create New Lesson</h1>
+            <Calendar className="h-6 w-6 text-[#5a189a]" />
+            <h1 className="text-xl font-semibold text-[#240046]">Create New Lesson</h1>
           </div>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-white/90 backdrop-blur-sm border-[#669bbc] shadow-xl">
+          <Card className="bg-white/90 backdrop-blur-sm border-[#c77dff] shadow-xl">
             <CardHeader>
-              <CardTitle className="text-[#780000]">Lesson Details</CardTitle>
-              <CardDescription className="text-[#003049]">Create a new lesson for your students</CardDescription>
+              <CardTitle className="text-[#240046]">Lesson Details</CardTitle>
+              <CardDescription className="text-[#3c096c]">Create a new lesson for your students</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -123,7 +123,7 @@ export default function CreateLessonPage() {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-[#780000]">
+                  <Label htmlFor="description" className="text-[#3c096c]">
                     Lesson Description
                   </Label>
                   <Input
@@ -132,19 +132,19 @@ export default function CreateLessonPage() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     required
-                    className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                    className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="location" className="text-[#780000]">
+                  <Label htmlFor="location" className="text-[#3c096c]">
                     Location Type
                   </Label>
                   <Select
                     value={formData.location}
                     onValueChange={(value) => setFormData({ ...formData, location: value })}
                   >
-                    <SelectTrigger className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]">
+                    <SelectTrigger className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -157,7 +157,7 @@ export default function CreateLessonPage() {
 
                 {formData.location === "ONLINE" || formData.location === "HYBRID" ? (
                   <div className="space-y-2">
-                    <Label htmlFor="meetingLink" className="text-[#780000]">
+                    <Label htmlFor="meetingLink" className="text-[#3c096c]">
                       Meeting Link
                     </Label>
                     <Input
@@ -166,14 +166,14 @@ export default function CreateLessonPage() {
                       placeholder="https://zoom.us/j/123456789"
                       value={formData.meetingLink}
                       onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })}
-                      className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                      className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                     />
                   </div>
                 ) : null}
 
                 {formData.location === "IN_PERSON" || formData.location === "HYBRID" ? (
                   <div className="space-y-2">
-                    <Label htmlFor="physicalAddress" className="text-[#780000]">
+                    <Label htmlFor="physicalAddress" className="text-[#3c096c]">
                       Physical Address
                     </Label>
                     <Textarea
@@ -182,14 +182,14 @@ export default function CreateLessonPage() {
                       value={formData.physicalAddress}
                       onChange={(e) => setFormData({ ...formData, physicalAddress: e.target.value })}
                       rows={3}
-                      className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                      className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                     />
                   </div>
                 ) : null}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="startTime" className="text-[#780000]">
+                    <Label htmlFor="startTime" className="text-[#3c096c]">
                       Start Time
                     </Label>
                     <Input
@@ -198,12 +198,12 @@ export default function CreateLessonPage() {
                       value={formData.startTime}
                       onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
                       required
-                      className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                      className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="endTime" className="text-[#780000]">
+                    <Label htmlFor="endTime" className="text-[#3c096c]">
                       End Time
                     </Label>
                     <Input
@@ -212,7 +212,7 @@ export default function CreateLessonPage() {
                       value={formData.endTime}
                       onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
                       required
-                      className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                      className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                     />
                   </div>
                 </div>
@@ -221,7 +221,7 @@ export default function CreateLessonPage() {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-[#780000] hover:bg-[#c1121f] text-white"
+                    className="flex-1 bg-[#5a189a] hover:bg-[#7b2cbf] text-white"
                   >
                     {loading ? "Creating..." : "Create Lesson"}
                   </Button>
@@ -229,7 +229,7 @@ export default function CreateLessonPage() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="border-[#780000] text-[#780000] hover:bg-[#fdf0d5]"
+                      className="border-[#5a189a] text-[#5a189a] hover:bg-[#e0aaff]/50"
                     >
                       Cancel
                     </Button>

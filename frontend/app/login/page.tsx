@@ -53,15 +53,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fdf0d5] via-white to-[#669bbc] flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-[#669bbc] shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-[#e0aaff] via-[#c77dff]/30 to-[#9d4edd]/20 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md border-[#c77dff] shadow-xl">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Music className="h-8 w-8 text-[#780000]" />
-            <span className="text-2xl font-bold text-gray-900">NoteBridge</span>
+            <Music className="h-8 w-8 text-[#5a189a]" />
+            <span className="text-2xl font-bold text-[#10002b]">NoteBridge</span>
           </div>
-          <CardTitle className="text-2xl text-[#780000]">Welcome back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardTitle className="text-2xl text-[#240046]">Welcome back</CardTitle>
+          <CardDescription className="text-[#3c096c]">Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -72,7 +72,7 @@ export default function LoginPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-[#780000]">
+              <Label htmlFor="username" className="text-[#3c096c]">
                 Username
               </Label>
               <Input
@@ -81,12 +81,12 @@ export default function LoginPage() {
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 required
-                className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[#780000]">
+              <Label htmlFor="password" className="text-[#3c096c]">
                 Password
               </Label>
               <div className="relative">
@@ -96,13 +96,13 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
-                  className="border-[#669bbc] focus:border-[#003049] focus:ring-[#003049]"
+                  className="border-[#c77dff] focus:border-[#7b2cbf] focus:ring-[#7b2cbf]"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-[#fdf0d5] text-[#003049]"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-[#e0aaff]/50 text-[#5a189a]"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -110,15 +110,15 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-[#780000] hover:bg-[#c1121f] text-white" disabled={loading}>
+            <Button type="submit" className="w-full bg-[#5a189a] hover:bg-[#7b2cbf] text-white" disabled={loading}>
               {loading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#3c096c]">
               Don't have an account?{" "}
-              <Link href="/register" className="text-[#003049] hover:text-[#780000] hover:underline">
+              <Link href="/register" className="text-[#7b2cbf] hover:text-[#5a189a] hover:underline">
                 Sign up
               </Link>
             </p>
