@@ -11,7 +11,7 @@ NoteBridge is a full-stack web application designed specifically for Northwester
 ## 🏗️ Architecture
 
 ### Frontend
-- **Framework**: Next.js 15 with React 19
+- **Framework**: Vite + React 19 with TypeScript
 - **Styling**: Tailwind CSS with Radix UI components
 - **Features**: 
   - Modern, responsive design optimized for mobile and desktop
@@ -85,13 +85,13 @@ cd sb-notebridge
 ```
 The backend will be available at `http://localhost:8080`
 
-#### Frontend (Next.js)
+#### Frontend (Vite)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The frontend will be available at `http://localhost:3000`
+The frontend will be available at `http://localhost:5173`
 
 #### Using Docker (Alternative)
 ```bash
@@ -103,15 +103,23 @@ docker-compose up
 
 ```
 NoteBridge/
-├── frontend/                 # Next.js frontend application
-│   ├── app/                 # App router pages
-│   │   ├── chats/          # Chat interface
-│   │   ├── dashboard/      # User dashboard
-│   │   ├── lessons/        # Lesson management
-│   │   ├── login/          # Authentication
-│   │   └── register/       # User registration
-│   ├── components/         # Reusable UI components
-│   └── lib/               # Utility functions
+├── frontend/                 # Vite + React frontend application
+│   ├── src/                 # Source code
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Page components
+│   │   ├── hooks/          # Custom React hooks
+│   │   ├── lib/            # Utility functions
+│   │   ├── services/       # API service functions
+│   │   ├── types/          # TypeScript type definitions
+│   │   ├── stores/         # State management
+│   │   ├── assets/         # Images, icons, etc.
+│   │   ├── App.tsx         # Main App component
+│   │   └── main.tsx        # Vite entry point
+│   ├── public/             # Static assets
+│   ├── package.json        # Dependencies and scripts
+│   ├── vite.config.ts      # Vite configuration
+│   ├── tsconfig.json       # TypeScript configuration
+│   └── index.html          # HTML entry point
 ├── sb-notebridge/          # Spring Boot backend
 │   ├── src/main/java/com/notebridge/project/
 │   │   ├── controller/     # REST API endpoints
@@ -218,14 +226,14 @@ The platform supports instruction for all musical instruments and specialties, i
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 15, React 19, TypeScript, Tailwind CSS |
+| Frontend | Vite, React 19, TypeScript, Tailwind CSS |
 | UI Components | Radix UI, Lucide React |
 | Backend | Spring Boot 3.4.5, Java 21 |
 | Database | MySQL 8.0, JPA/Hibernate |
 | Caching | Redis |
 | File Storage | Firebase Storage |
 | Build Tools | Maven, npm |
-| Development | Docker, Hot Reload |
+| Development | Vite Dev Server, Hot Reload |
 
 ## 🤝 Contributing
 
