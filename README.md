@@ -99,6 +99,11 @@ cd sb-notebridge
 docker-compose up
 ```
 
+#### Clean Up Database (for dev purposes)
+```bash
+cd sb-notebridge
+mysql -u root -p notebridge < src/main/resources/cleanup-all-tables.sql
+```
 ## 📁 Project Structure
 
 ```
