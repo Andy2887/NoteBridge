@@ -17,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 import com.notebridge.project.service.UserDetailsServiceImpl;
 
@@ -33,20 +34,45 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable()) // Disable CSRF for API development
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/api/users/register").permitAll()
-                        .requestMatchers("/api/files/**").authenticated()
-                        .requestMatchers("/api/users/**").authenticated()
-                        .requestMatchers("/api/lessons/**").authenticated()
-                        .requestMatchers("/api/chats/**").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .permitAll()
-                )
-                .logout((logout) -> logout.permitAll())
-                .authenticationProvider(authenticationProvider());
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+            .authorizeHttpRequests((requests) -> requests
+                // Allow public access to these endpoints
+                .requestMatchers("/", "/home", "/api/users/register", "/api/auth/login").permitAll()
+                // Require authentication for API endpoints
+                .requestMatchers("/api/files/**").authenticated()
+                .requestMatchers("/api/users/**").authenticated()
+                .requestMatchers("/api/lessons/**").authenticated()
+                .requestMatchers("/api/chats/**").authenticated()
+                .anyRequest().authenticated()
+            )
+            // Configure form login for web pages (not API)
+            .formLogin((form) -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/dashboard", true)
+                .permitAll()
+            )
+            // Configure logout
+            .logout((logout) -> logout
+                .logoutUrl("/api/auth/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+            )
+            .authenticationProvider(authenticationProvider())
+            // Handle API authentication failures
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint((request, response, authException) -> {
+                    // For API requests, return 401 instead of redirecting
+                    if (request.getRequestURI().startsWith("/api/")) {
+                        response.setStatus(401);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\":\"Authentication required\"}");
+                    } else {
+                        response.sendRedirect("/login");
+                    }
+                })
+            );
 
         return http.build();
     }
@@ -57,18 +83,12 @@ public class SecurityConfig {
         
         configuration.setAllowedOrigins(List.of(
             "http://localhost:5173",
-            "https://your-production-domain.com" // my frontend url
+            "https://your-production-domain.com"
         ));
-        // Allow all HTTP methods
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        
-        // Allow all headers
         configuration.setAllowedHeaders(List.of("*"));
-        
-        // Allow credentials (cookies, authorization headers)
         configuration.setAllowCredentials(true);
         
-        // Register the configuration for all API endpoints
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -81,15 +101,6 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        /*
-        DaoAuthenticationProvider is an implementation of Spring Security's AuthenticationProvider interface that:
-
-        Retrieves User Details: Uses a UserDetailsService to load user information from your data source (in your case, the MySQL database via UserDetailsServiceImpl)
-
-        Password Validation: Compares the provided password with the stored password using a PasswordEncoder (BCrypt in your case)
-
-        Authentication Decision: Returns an authenticated Authentication object if credentials are valid, or throws an exception if they're not
-         */
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
