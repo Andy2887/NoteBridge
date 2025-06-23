@@ -29,5 +29,4 @@ public class Chat {
     
     @Column(nullable = false)
     private LocalDateTime lastMessageAt = LocalDateTime.now();
-    private boolean isActive = true;
 }

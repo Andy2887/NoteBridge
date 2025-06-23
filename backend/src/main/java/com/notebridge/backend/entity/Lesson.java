@@ -20,9 +20,9 @@ public class Lesson {
     @Column(length = 1000)
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    // ONLINE, IN_PERSON, HYBRID
     @Column(nullable = false)
-    private LocationType location;
+    private String location;
 
     private LocalDateTime startTime;
 
@@ -38,9 +38,4 @@ public class Lesson {
 
     private boolean isCancelled = false;
 
-    public enum LocationType {
-        ONLINE,
-        IN_PERSON,
-        HYBRID
-    }
 }

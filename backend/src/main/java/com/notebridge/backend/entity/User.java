@@ -14,10 +14,6 @@ import java.util.List;
 @Data
 public class User implements UserDetails {
 
-    public enum Role {
-        STUDENT, ADMIN, TEACHER
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,9 +27,9 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Enumerated(EnumType.STRING)
+    // STUDENT, ADMIN, TEACHER
     @Column(nullable = false)
-    private Role role;
+    private String role;
 
     private String instrument;
 
@@ -46,7 +42,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
