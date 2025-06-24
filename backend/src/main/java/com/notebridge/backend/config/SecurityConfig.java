@@ -33,7 +33,12 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable) // Turn off CSRF (not needed for API)
                 .cors(Customizer.withDefaults()) // Enable CORS (to allow requests from other domains)
                 // Secure different parts of the app
-                .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/public/**").permitAll() // Public Paths
+                .authorizeHttpRequests(request -> 
+                    request.requestMatchers(
+                            "/auth/**",     // Authentication endpoints
+                            "/",            // Homepage
+                            "/about"       // About page
+                        ).permitAll()
                         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN") // Admin-only paths
                         .requestMatchers("/user/**").hasAnyAuthority("STUDENT", "TEACHER", "ADMIN") // Student, Teacher and Admin paths
                         .anyRequest().authenticated()) // All other paths need login
@@ -43,7 +48,6 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 // Adds the JWTAuthFilter to validate tokens before the UsernamePasswordAuthenticationFilter processes authentication.
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
 
     }
