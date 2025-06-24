@@ -12,19 +12,19 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 @Component
-public class JwtUtils {
+public class JWTUtils {
     private SecretKey key;
     private static final Long EXPIRATION_TIME = 86400000L;
 
-    public JwtUtils(){
-        
-        // Get secret string from env file
-        String secretString = System.getenv("JWT_SECRET");
+
+    public JWTUtils(@Value("${jwt.secret}") String secretString){
+
         // decode string into binary format
         byte[] keyBytes = Base64.getDecoder().decode(secretString.getBytes(StandardCharsets.UTF_8));
         // Create a SecretKey object from the byte array
