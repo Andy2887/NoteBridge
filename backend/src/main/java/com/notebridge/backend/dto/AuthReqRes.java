@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import com.notebridge.backend.entity.User;
+import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL) // Exclude null fields from JSON
@@ -32,4 +33,5 @@ public class AuthReqRes {
     
     // User object for responses
     private User user;
+    private List<User> usersList;
 }
