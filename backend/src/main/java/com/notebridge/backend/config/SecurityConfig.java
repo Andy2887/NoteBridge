@@ -35,9 +35,8 @@ public class SecurityConfig {
                 // Secure different parts of the app
                 .authorizeHttpRequests(request -> 
                     request.requestMatchers(
-                            "/auth/**",     // Authentication endpoints
-                            "/",            // Homepage
-                            "/about"       // About page
+                            "/auth/**", // Authentication endpoints
+                            "/public/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN") // Admin-only paths
                         .requestMatchers("/user/**").hasAnyAuthority("STUDENT", "TEACHER", "ADMIN") // Student, Teacher and Admin paths

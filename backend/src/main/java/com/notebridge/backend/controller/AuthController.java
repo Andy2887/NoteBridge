@@ -38,20 +38,20 @@ public class AuthController {
         return ResponseEntity.ok(usersManagementService.getAllUsers());
     }
 
-    // Get User by ID
+    // Get User by ID - permit only to admin
     @GetMapping("/admin/get-user/{userId}")
     public ResponseEntity<AuthReqRes> getUserById(@PathVariable Long userId){
         return ResponseEntity.ok(usersManagementService.getUserByID(userId));
     }
 
     // Update user
-    @PutMapping("/admin/update/{userId}")
+    @PutMapping("/user/update/{userId}")
     public ResponseEntity<AuthReqRes> updateUser(@PathVariable Long userId, @RequestBody AuthReqRes req){
         return ResponseEntity.ok(usersManagementService.updateUser(userId, req));
     }
 
     // Get the profile
-    @GetMapping("/adminuser/get-profile")
+    @GetMapping("/user/get-profile")
     public ResponseEntity<AuthReqRes> getMyProfile(){
 
         // Get the Authentication object for the current user
@@ -63,7 +63,7 @@ public class AuthController {
     }
 
     // Delete User
-    @DeleteMapping("/admin/deleteUser/{userId}")
+    @DeleteMapping("/user/deleteUser/{userId}")
     public ResponseEntity<AuthReqRes> deleteUser(@PathVariable Long userId){
         return ResponseEntity.ok(usersManagementService.deleteUser(userId));
     }
