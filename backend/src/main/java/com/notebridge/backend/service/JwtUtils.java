@@ -27,7 +27,6 @@ public class JwtUtils {
         String secretString = System.getenv("JWT_SECRET");
         // decode string into binary format
         byte[] keyBytes = Base64.getDecoder().decode(secretString.getBytes(StandardCharsets.UTF_8));
-
         // Create a SecretKey object from the byte array
         this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
