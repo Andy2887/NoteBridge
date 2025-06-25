@@ -1,10 +1,13 @@
 package com.notebridge.backend.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "files")
+@Data
 public class FileMetaData {
 
     @Id

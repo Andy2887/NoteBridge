@@ -18,12 +18,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 @Component
-public class JWTUtils {
+public class JwtUtils {
     private SecretKey key;
     private static final Long EXPIRATION_TIME = 86400000L;
 
 
-    public JWTUtils(@Value("${jwt.secret}") String secretString){
+    public JwtUtils(@Value("${jwt.secret}") String secretString){
 
         // decode string into binary format
         byte[] keyBytes = Base64.getDecoder().decode(secretString.getBytes(StandardCharsets.UTF_8));

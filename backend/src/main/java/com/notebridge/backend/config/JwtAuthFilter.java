@@ -1,6 +1,6 @@
 package com.notebridge.backend.config;
 
-import com.notebridge.backend.service.JWTUtils;
+import com.notebridge.backend.service.JwtUtils;
 import com.notebridge.backend.service.OurUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
-    JWTUtils jwtUtils;
+    JwtUtils jwtUtils;
 
     @Autowired
     OurUserDetailsService ourUserDetailsService;

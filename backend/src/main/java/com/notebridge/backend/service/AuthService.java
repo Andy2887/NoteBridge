@@ -20,7 +20,7 @@ public class AuthService {
     private UsersRepo usersRepo;
 
     @Autowired
-    private JWTUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @Autowired
     private AuthenticationManager authenticationManager;

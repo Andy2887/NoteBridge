@@ -35,12 +35,21 @@ public class SecurityConfig {
                 // Secure different parts of the app
                 .authorizeHttpRequests(request -> 
                     request.requestMatchers(
-                            "/auth/**", // Authentication endpoints
+                            "/auth/**",
                             "/public/**"
-                        ).permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN") // Admin-only paths
-                        .requestMatchers("/user/**").hasAnyAuthority("STUDENT", "TEACHER", "ADMIN") // Student, Teacher and Admin paths
+                        ).permitAll() // Public paths
+
+                        .requestMatchers(
+                            "/admin/**"
+                        ).hasAnyAuthority("ADMIN") // Admin-only paths
+                        
+                        .requestMatchers(
+                            "/user/**", 
+                            "/file/**"
+                        ).hasAnyAuthority("STUDENT", "TEACHER", "ADMIN") // Student, Teacher and Admin paths
+                        
                         .anyRequest().authenticated()) // All other paths need login
+                        
                 // Don't store the sessions on the server (stateless)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Use a Custom authentication provider
