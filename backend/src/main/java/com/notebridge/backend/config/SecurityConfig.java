@@ -38,18 +38,15 @@ public class SecurityConfig {
                             "/auth/**",
                             "/public/**"
                         ).permitAll() // Public paths
-
                         .requestMatchers(
                             "/admin/**"
                         ).hasAnyAuthority("ADMIN") // Admin-only paths
-                        
                         .requestMatchers(
                             "/user/**", 
-                            "/file/**"
+                            "/file/**",
+                            "/lesson/**"
                         ).hasAnyAuthority("STUDENT", "TEACHER", "ADMIN") // Student, Teacher and Admin paths
-                        
                         .anyRequest().authenticated()) // All other paths need login
-                        
                 // Don't store the sessions on the server (stateless)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Use a Custom authentication provider
