@@ -46,12 +46,7 @@ public class FilesController {
 
     @GetMapping("/retrieve/{fileUniqueId}")
     public ResponseEntity<FilesReqRes> retrieveFile(@PathVariable String fileUniqueId) {
-        try {
-            FilesReqRes fileResponse = fileStorageService.retrieveFile(fileUniqueId);
-            return ResponseEntity.ok(fileResponse);
-        } catch (Exception e) {
-            return createFailureResponse(500, "Internal Server Error", e.getMessage());
-        }
+        return ResponseEntity.ok(fileStorageService.retrieveFile(fileUniqueId));
     }
 
     private ResponseEntity<FilesReqRes> createSuccessResponse(int statusCode, String message, String fileName) {

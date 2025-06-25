@@ -175,24 +175,37 @@ public class FilesService {
     }
 
     public FilesReqRes retrieveFile(String fileId) {
-        FileMetaData fileMetadata = repo.findByUniqueId(fileId);
-
-        if (fileMetadata == null) {
-            throw new IllegalArgumentException("No file found with the given ID: " + fileId);
-        }
-
-        String objectName = fileMetadata.getObjectName();
-        BlobId blobId = BlobId.of(bucketName, objectName);
-        Blob blob = storage.get(blobId);
-
-        if (blob == null || !blob.exists()) {
-            throw new IllegalArgumentException("No file found with the given ID: " + fileId);
-        }
-
-        // FilesReqRes fileResponse = new FilesReqRes(objectName, blob.getContent());
         FilesReqRes response = new FilesReqRes();
-        response.setFileName(objectName);
-        response.setFileContent(blob.getContent());
-        return response;
+        
+        try {
+            FileMetaData fileMetadata = repo.findByUniqueId(fileId);
+
+            if (fileMetadata == null) {
+                response.setStatusCode(404);
+                response.setMessage("No file found with the given ID: " + fileId);
+                return response;
+            }
+
+            String objectName = fileMetadata.getObjectName();
+            BlobId blobId = BlobId.of(bucketName, objectName);
+            Blob blob = storage.get(blobId);
+
+            if (blob == null || !blob.exists()) {
+                response.setStatusCode(404);
+                response.setMessage("File not found in storage with ID: " + fileId);
+                return response;
+            }
+
+            response.setFileName(objectName);
+            response.setFileContent(blob.getContent());
+            response.setStatusCode(200);
+            response.setMessage("File retrieved successfully");
+            return response;
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Internal Server Error");
+            response.setError(e.getMessage());
+            return response;
+        }
     }
 }
