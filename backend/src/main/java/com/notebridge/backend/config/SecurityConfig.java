@@ -44,7 +44,9 @@ public class SecurityConfig {
                         .requestMatchers(
                             "/user/**", 
                             "/file/**",
-                            "/lesson/**"
+                            "/lesson/**",
+                            "/message/**",
+                            "/chat/**"
                         ).hasAnyAuthority("STUDENT", "TEACHER", "ADMIN") // Student, Teacher and Admin paths
                         .anyRequest().authenticated()) // All other paths need login
                 // Don't store the sessions on the server (stateless)

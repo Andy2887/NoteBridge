@@ -76,15 +76,59 @@ backend/
 
 ## API Endpoints
 
+For detailed explanation, please see `backend/README.md`.
+
 ### Authentication
+- `POST /auth/register` - Register new user account
 - `POST /auth/login` - User login
-- `POST /auth/register` - User registration
+- `POST /auth/refresh` - Refresh JWT token
+
+### User Management
+- `GET /user/get-profile` - Get current user profile
+- `PUT /user/update/{userId}` - Update user profile
+- `DELETE /user/deleteUser/{userId}` - Delete user account
+
+### Admin Endpoints
+- `GET /admin/get-all-users` - Get all users (Admin only)
+- `GET /admin/get-user/{userId}` - Get user by ID (Admin only)
+
+### Lesson Management
+- `GET /lesson` - Get all active lessons
+- `GET /lesson/{lesson_id}` - Get lesson by ID
+- `GET /lesson/teacher/{teacher_id}` - Get lessons by teacher
+- `POST /lesson/create/{teacher_id}` - Create new lesson
+- `PUT /lesson/update/{lesson_id}/{teacher_id}` - Update lesson
+- `PUT /lesson/cancel/{lesson_id}/{teacher_id}` - Cancel lesson
+- `PUT /lesson/reactivate/{lesson_id}/{teacher_id}` - Reactivate lesson
+
+### Admin Lesson Management
+- `POST /admin/lesson/create` - Create lesson for any teacher
+- `PUT /admin/lesson/update/{lesson_id}` - Update any lesson
+- `PUT /admin/lesson/cancel/{lesson_id}` - Cancel any lesson
+- `PUT /admin/lesson/reactivate/{lesson_id}` - Reactivate any lesson
+- `GET /admin/lesson/all` - Get all lessons including cancelled
+- `DELETE /admin/lesson/delete/{lesson_id}` - Delete lesson permanently
 
 ### File Management
-- `POST /files/upload` - General file upload
-- `POST /files/upload-profile-picture/{userId}` - Upload profile picture
-- `POST /files/upload-lesson-picture/{lessonId}` - Upload lesson picture
-- `GET /files/{fileId}` - Retrieve file
+- `POST /file/upload/profile_pic/{userId}` - Upload profile picture
+- `POST /file/upload/lesson_pic/{lessonId}` - Upload lesson picture
+- `GET /file/retrieve/{fileUniqueId}` - Retrieve uploaded file
+
+### Chat Management
+- `POST /chat/create/{teacher_id}/{student_id}` - Create or get chat
+- `POST /chat/create` - Create or get chat (request body)
+- `GET /chat/user/{user_id}` - Get user's chats
+- `GET /chat/{chat_id}/user/{user_id}` - Get chat by ID
+- `PUT /chat/{chat_id}/subject/{user_id}` - Update chat subject
+- `PUT /chat/{chat_id}/subject/user/{user_id}` - Update chat subject (request body)
+
+### Message Management
+- `POST /message/send/user/{sender_id}` - Send message to chat
+- `GET /message/chat/{chat_id}/user/{user_id}` - Get chat messages (paginated)
+- `GET /message/chat/{chat_id}/recent/user/{user_id}` - Get recent messages
+- `PUT /message/chat/{chat_id}/mark-read/user/{user_id}` - Mark messages as read
+- `GET /message/chat/{chat_id}/unread-count/user/{user_id}` - Get unread count for chat
+- `GET /message/unread-count/user/{user_id}` - Get total unread count
 
 ## References
 
