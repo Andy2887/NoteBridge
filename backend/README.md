@@ -23,7 +23,6 @@ Authorization: Bearer <your-jwt-token>
 ```json
 {
   "email": "user@example.com",
-  "username": "username",
   "password": "password123",
   "role": "STUDENT", // or "TEACHER" or "ADMIN"
   "firstName": "John", // optional

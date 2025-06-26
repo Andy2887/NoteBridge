@@ -21,7 +21,6 @@ public class AuthReqRes {
     private String expirationTime;
     
     // User fields for registration/login requests and responses
-    private String username;
     private String email;
     private String password;
     private String role; // STUDENT, ADMIN, TEACHER

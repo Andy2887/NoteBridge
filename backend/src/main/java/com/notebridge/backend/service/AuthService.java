@@ -41,12 +41,6 @@ public class AuthService {
                 return resp;
             }
             
-            if(registrationRequest.getUsername() == null || registrationRequest.getUsername().trim().isEmpty()) {
-                resp.setStatusCode(400);
-                resp.setMessage("Username is required");
-                return resp;
-            }
-            
             if(registrationRequest.getPassword() == null || registrationRequest.getPassword().trim().isEmpty()) {
                 resp.setStatusCode(400);
                 resp.setMessage("Password is required");
@@ -69,7 +63,6 @@ public class AuthService {
             {
                 User ourUser = new User();
                 ourUser.setEmail(registrationRequest.getEmail());
-                ourUser.setUsername(registrationRequest.getUsername());
                 ourUser.setRole(registrationRequest.getRole());
                 ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
                 
@@ -220,9 +213,6 @@ public class AuthService {
                 // Update fields from AuthReqRes to User entity
                 if(updatedUserRequest.getEmail() != null) {
                     existingUser.setEmail(updatedUserRequest.getEmail());
-                }
-                if(updatedUserRequest.getUsername() != null) {
-                    existingUser.setUsername(updatedUserRequest.getUsername());
                 }
                 if(updatedUserRequest.getRole() != null) {
                     existingUser.setRole(updatedUserRequest.getRole());
