@@ -21,6 +21,8 @@ public class LessonsReqRes {
 
     // Lesson fields
     private User teacher;
+    private String title;
+    private String instrument;
     private String description;
     private String location;
     private LocalDateTime startTime;

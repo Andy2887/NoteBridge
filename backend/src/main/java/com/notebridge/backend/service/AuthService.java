@@ -67,7 +67,6 @@ public class AuthService {
                 ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
                 
                 // Optional fields - safe to be null
-                ourUser.setInstrument(registrationRequest.getInstrument());
                 ourUser.setBio(registrationRequest.getBio());
                 ourUser.setFirstName(registrationRequest.getFirstName());
                 ourUser.setLastName(registrationRequest.getLastName());
@@ -216,9 +215,6 @@ public class AuthService {
                 }
                 if(updatedUserRequest.getRole() != null) {
                     existingUser.setRole(updatedUserRequest.getRole());
-                }
-                if(updatedUserRequest.getInstrument() != null) {
-                    existingUser.setInstrument(updatedUserRequest.getInstrument());
                 }
                 if(updatedUserRequest.getBio() != null) {
                     existingUser.setBio(updatedUserRequest.getBio());

@@ -17,6 +17,12 @@ public class Lesson {
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String instrument;
+
     @Column(length = 1000)
     private String description;
 

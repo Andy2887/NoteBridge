@@ -28,8 +28,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String role;
 
-    private String instrument;
-
     @Column(length = 1000)
     private String bio;
 

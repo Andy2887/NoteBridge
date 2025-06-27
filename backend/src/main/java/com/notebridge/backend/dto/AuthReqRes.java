@@ -24,7 +24,6 @@ public class AuthReqRes {
     private String email;
     private String password;
     private String role; // STUDENT, ADMIN, TEACHER
-    private String instrument;
     private String bio;
     private String firstName;
     private String lastName;

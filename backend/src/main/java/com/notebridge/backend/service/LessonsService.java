@@ -106,6 +106,8 @@ public class LessonsService {
             
             Lesson lesson = new Lesson();
             lesson.setTeacher(teacher);
+            lesson.setTitle(lessonsRequest.getTitle());
+            lesson.setInstrument(lessonsRequest.getInstrument());
             lesson.setDescription(lessonsRequest.getDescription());
             lesson.setLocation(lessonsRequest.getLocation());
             lesson.setStartTime(lessonsRequest.getStartTime());
@@ -142,6 +144,8 @@ public class LessonsService {
             
             Lesson lesson = new Lesson();
             lesson.setTeacher(teacher);
+            lesson.setTitle(lessonsRequest.getTitle());
+            lesson.setInstrument(lessonsRequest.getInstrument());
             lesson.setDescription(lessonsRequest.getDescription());
             lesson.setLocation(lessonsRequest.getLocation());
             lesson.setStartTime(lessonsRequest.getStartTime());
@@ -182,6 +186,8 @@ public class LessonsService {
                 return resp;
             }
             
+            existingLesson.setTitle(lessonsRequest.getTitle());
+            existingLesson.setInstrument(lessonsRequest.getInstrument());
             existingLesson.setDescription(lessonsRequest.getDescription());
             existingLesson.setLocation(lessonsRequest.getLocation());
             existingLesson.setStartTime(lessonsRequest.getStartTime());
@@ -221,7 +227,8 @@ public class LessonsService {
                     existingLesson.setTeacher(newTeacher);
                 }
             }
-            
+            existingLesson.setTitle(lessonsRequest.getTitle());
+            existingLesson.setInstrument(lessonsRequest.getInstrument());
             existingLesson.setDescription(lessonsRequest.getDescription());
             existingLesson.setLocation(lessonsRequest.getLocation());
             existingLesson.setStartTime(lessonsRequest.getStartTime());
