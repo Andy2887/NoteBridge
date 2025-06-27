@@ -27,7 +27,6 @@ Authorization: Bearer <your-jwt-token>
   "role": "STUDENT", // or "TEACHER" or "ADMIN"
   "firstName": "John", // optional
   "lastName": "Doe", // optional
-  "instrument": "Piano", // optional
   "bio": "Description about the user", // optional
   "phoneNumber": "+1234567890" // optional
 }
@@ -140,6 +139,8 @@ Authorization: Bearer <your-jwt-token>
 **Request Body:**
 ```json
 {
+  "title": "Piano Fundamentals",
+  "instrument": "Piano",
   "description": "Piano lesson for beginners",
   "location": "ONLINE", // or "IN_PERSON" or "HYBRID"
   "startTime": "2024-02-01T10:00:00",

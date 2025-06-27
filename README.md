@@ -144,6 +144,11 @@ This project was built using knowledge from the following tutorials:
    - JWT token implementation
    - Security configuration best practices
 
+3. **Deployment Guide**: [Free Hosting Bliss: Deploying Your Spring Boot App on Render](https://medium.com/spring-boot/free-hosting-bliss-deploying-your-spring-boot-app-on-render-d0ebd9713b9d)
+   - Tutorial for deploying Spring Boot applications on Render
+   - Free hosting solution for Spring Boot apps
+   - Deployment configuration and setup
+
 ## Contributing
 
 1. Fork the repository
