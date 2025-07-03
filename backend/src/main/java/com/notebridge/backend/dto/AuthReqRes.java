@@ -4,12 +4,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import com.notebridge.backend.entity.User;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL) // Exclude null fields from JSON
 @JsonIgnoreProperties(ignoreUnknown = true) // Ignore the "not defined" fields in my JSON file
-public class AuthReqRes {
+public class AuthReqRes implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     // Response fields
     private int statusCode;
     private String error;

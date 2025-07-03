@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -163,6 +166,7 @@ public class AuthService {
     }
 
     // Fetch user by ID
+    @Cacheable(value = "users", key = "#id")
     public AuthReqRes getUserByID(Long id) {
         AuthReqRes reqRes = new AuthReqRes();
         try {
@@ -178,6 +182,7 @@ public class AuthService {
     }
 
     // Delete User
+    @CacheEvict(value = "users", key = "#userId")
     public AuthReqRes deleteUser(Long userId){
         AuthReqRes reqRes = new AuthReqRes();
 
@@ -202,6 +207,7 @@ public class AuthService {
     }
 
     // update User
+    @CachePut(value = "users", key = "#userId")
     public AuthReqRes updateUser(Long userId, AuthReqRes updatedUserRequest){
         AuthReqRes reqRes = new AuthReqRes();
         try {
@@ -252,10 +258,11 @@ public class AuthService {
     }
 
     // Get my info
-    public AuthReqRes getMyInfo(String email){
+    @Cacheable(value = "users", key = "#userId")
+    public AuthReqRes getMyInfo(Long userId){
         AuthReqRes reqRes = new AuthReqRes();
         try{
-            Optional<User> userOptional = usersRepo.findByEmail(email);
+            Optional<User> userOptional = usersRepo.findById(userId);
             if(userOptional.isPresent()){
                 reqRes.setUser(userOptional.get());
                 reqRes.setStatusCode(200);

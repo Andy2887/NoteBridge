@@ -20,7 +20,7 @@ public class LessonsService {
     @Autowired
     private LessonsRepo lessonsRepo;
 
-    // Get all lessons
+    // GET ALL LESSONS - Available to all authenticated users
     public LessonsReqRes getAllLessons(){
         LessonsReqRes resp = new LessonsReqRes();
 
