@@ -4,6 +4,7 @@ import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,7 +14,9 @@ import com.notebridge.backend.entity.User;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL) // Exclude null fields from JSON
 @JsonIgnoreProperties(ignoreUnknown = true) // Ignore the "not defined" fields in my JSON file
-public class LessonsReqRes {
+public class LessonsReqRes implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     // Response fields
     private int statusCode;
     private String error;

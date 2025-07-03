@@ -3,6 +3,10 @@ package com.notebridge.backend.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import com.notebridge.backend.dto.LessonsReqRes;
@@ -21,6 +25,7 @@ public class LessonsService {
     private LessonsRepo lessonsRepo;
 
     // GET ALL LESSONS - Available to all authenticated users
+    @Cacheable(value = "lessons", key = "'all-active'")
     public LessonsReqRes getAllLessons(){
         LessonsReqRes resp = new LessonsReqRes();
 
@@ -43,17 +48,18 @@ public class LessonsService {
     }
 
     // GET LESSON BY ID - Available to all authenticated users
-    public LessonsReqRes getLessonById(Long id) {
+    @Cacheable(value = "lesson", key = "#lessonId")
+    public LessonsReqRes getLessonById(Long lessonId) {
         LessonsReqRes resp = new LessonsReqRes();
         try {
-            Lesson lesson = lessonsRepo.findById(id).orElse(null);
+            Lesson lesson = lessonsRepo.findById(lessonId).orElse(null);
             if (lesson != null) {
                 resp.setLesson(lesson);
                 resp.setStatusCode(200);
                 resp.setMessage("Lesson retrieved successfully");
             } else {
                 resp.setStatusCode(404);
-                resp.setMessage("Lesson not found with id: " + id);
+                resp.setMessage("Lesson not found with id: " + lessonId);
             }
         } catch (Exception e) {
             resp.setStatusCode(500);
@@ -64,6 +70,7 @@ public class LessonsService {
     }
 
     // GET LESSONS BY TEACHER - Available to all authenticated users
+    @Cacheable(value = "teacher-lessons", key = "#teacherId")
     public LessonsReqRes getLessonsByTeacher(Long teacherId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -93,6 +100,10 @@ public class LessonsService {
     }
 
     // CREATE LESSON - Only teachers can create lessons
+    @Caching(evict = {
+        @CacheEvict(value = "lessons", key = "'all-active'"),
+        @CacheEvict(value = "teacher-lessons", key = "#teacherId")
+    })
     public LessonsReqRes createLesson(LessonsReqRes lessonsRequest, Long teacherId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -131,6 +142,10 @@ public class LessonsService {
     }
 
     // CREATE LESSON FOR ADMIN - This is for admin, they could create any lesson and associate the lesson to a teacher
+    @Caching(evict = {
+        @CacheEvict(value = "lessons", key = "'all-active'"),
+        @CacheEvict(value = "teacher-lessons", key = "#lessonsRequest.teacher.id")
+    })
     public LessonsReqRes createLessonForAdmin(LessonsReqRes lessonsRequest) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -169,6 +184,13 @@ public class LessonsService {
     }
 
     // UPDATE LESSON - Only the teacher who created the lesson can update it
+    @Caching(
+        put = @CachePut(value = "lesson", key = "#lessonId"),
+        evict = {
+            @CacheEvict(value = "lessons", key = "'all-active'"),
+            @CacheEvict(value = "teacher-lessons", key = "#teacherId")
+        }
+    )
     public LessonsReqRes updateLesson(Long lessonId, LessonsReqRes lessonsRequest, Long teacherId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -210,6 +232,13 @@ public class LessonsService {
     }
 
     // UPDATE LESSON FOR ADMIN - This is for admin, they could update any lesson
+    @Caching(
+        put = @CachePut(value = "lesson", key = "#lessonId"),
+        evict = {
+            @CacheEvict(value = "lessons", key = "'all-active'"),
+            @CacheEvict(value = "teacher-lessons", key = "#lessonsRequest.teacher.id")
+        }
+    )
     public LessonsReqRes updateLessonForAdmin(Long lessonId, LessonsReqRes lessonsRequest) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -251,6 +280,13 @@ public class LessonsService {
     }
 
     // CANCEL LESSON - Only the teacher who created the lesson could cancel it
+    @Caching(
+        put = @CachePut(value = "lesson", key = "#lessonId"),
+        evict = {
+            @CacheEvict(value = "lessons", key = "'all-active'"),
+            @CacheEvict(value = "teacher-lessons", key = "#teacherId")
+        }
+    )
     public LessonsReqRes cancelLesson(Long lessonId, Long teacherId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -282,6 +318,13 @@ public class LessonsService {
     }
 
     // CANCEL LESSON FOR ADMIN - This is for Admin, they could cancel any lesson
+    @Caching(
+        put = @CachePut(value = "lesson", key = "#lessonId"),
+        evict = {
+            @CacheEvict(value = "lessons", key = "'all-active'"),
+            @CacheEvict(value = "teacher-lessons", allEntries = true)
+        }
+    )
     public LessonsReqRes cancelLessonForAdmin(Long lessonId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -307,6 +350,13 @@ public class LessonsService {
     }
 
     // REACTIVATE LESSON - Only the teacher who created the lesson can reactivate it
+    @Caching(
+        put = @CachePut(value = "lesson", key = "#lessonId"),
+        evict = {
+            @CacheEvict(value = "lessons", key = "'all-active'"),
+            @CacheEvict(value = "teacher-lessons", key = "#teacherId")
+        }
+    )
     public LessonsReqRes reactivateLesson(Long lessonId, Long teacherId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -338,6 +388,13 @@ public class LessonsService {
     }
 
     // REACTIVATE LESSON FOR ADMIN - Admin could reactivate any lesson
+    @Caching(
+        put = @CachePut(value = "lesson", key = "#lessonId"),
+        evict = {
+            @CacheEvict(value = "lessons", key = "'all-active'"),
+            @CacheEvict(value = "teacher-lessons", allEntries = true)
+        }
+    )
     public LessonsReqRes reactivateLessonForAdmin(Long lessonId) {
         LessonsReqRes resp = new LessonsReqRes();
         
@@ -387,6 +444,11 @@ public class LessonsService {
     // DELETE LESSON PERMANENTLY - Only admins can permanently delete lessons
     // When you delete the lesson from database, you also need to delete the 
     // lesson image (in files repo) associated with the lesson
+    @Caching(evict = {
+        @CacheEvict(value = "lessons", key = "'all-active'"),
+        @CacheEvict(value = "lesson", key = "#lessonId"),
+        @CacheEvict(value = "teacher-lessons", allEntries = true)
+    })
     public LessonsReqRes deleteLessonPermanently(Long lessonId) {
         LessonsReqRes resp = new LessonsReqRes();
         

@@ -17,6 +17,7 @@ A comprehensive note-taking and lesson management application built with Spring 
 - **Spring Security**: Authentication and authorization
 - **Spring Data JPA**: Database operations
 - **MySQL**: Primary database
+- **Redis**: In-memory caching for improved performance
 - **Firebase Storage**: File storage solution
 - **JWT**: Token-based authentication
 
@@ -25,6 +26,7 @@ A comprehensive note-taking and lesson management application built with Spring 
 - File upload system with organized storage (profile_pictures/, lesson_pictures/)
 - RESTful API endpoints
 - Database entities for Users, Lessons, Messages, Chats, and File metadata
+- Redis caching implementation for optimized data retrieval
 
 ## Project Structure
 
@@ -47,6 +49,7 @@ backend/
 ### Prerequisites
 - Java 17 or higher
 - MySQL database
+- Redis server (version 6.0+ recommended)
 - Firebase project with Storage enabled
 - Maven
 
@@ -62,13 +65,28 @@ backend/
    - Create a MySQL database
    - Update `application.properties` with your database credentials
 
-3. **Configure Firebase**
+3. **Configure Redis**
+   - Install and start Redis server
+   - Update `application.properties` with your Redis connection settings:
+     ```properties
+     spring.cache.type=redis
+     spring.redis.host=localhost
+     spring.redis.port=6379
+     ```
+
+4. **Configure Firebase**
    - Create a Firebase project
    - Enable Firebase Storage
    - Download the service account key and place it as `serviceAccountKey.json` in `src/main/resources/`
    - Update the storage bucket name in `application.properties`
 
-4. **Run the application**
+6. **Start Redis**
+   - You need to have Redis installed locally
+   ```bash
+   redis-server
+   ```
+
+6. **Run the application**
    ```bash
    cd backend
    mvn spring-boot:run
@@ -144,7 +162,12 @@ This project was built using knowledge from the following tutorials:
    - JWT token implementation
    - Security configuration best practices
 
-3. **Deployment Guide**: [Free Hosting Bliss: Deploying Your Spring Boot App on Render](https://medium.com/spring-boot/free-hosting-bliss-deploying-your-spring-boot-app-on-render-d0ebd9713b9d)
+3. **Spring Boot Caching with Redis**: [Optimizing Spring Boot Applications with Redis Caching](https://medium.com/@tharindudulshanfdo/optimizing-spring-boot-applications-with-redis-caching-35eabadae012)
+   - Implementation of Redis caching in Spring Boot
+   - Cache annotations and configuration
+   - Performance optimization strategies
+
+4. **Deployment Guide**: [Free Hosting Bliss: Deploying Your Spring Boot App on Render](https://medium.com/spring-boot/free-hosting-bliss-deploying-your-spring-boot-app-on-render-d0ebd9713b9d)
    - Tutorial for deploying Spring Boot applications on Render
    - Free hosting solution for Spring Boot apps
    - Deployment configuration and setup
