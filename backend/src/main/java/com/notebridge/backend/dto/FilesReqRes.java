@@ -14,6 +14,6 @@ public class FilesReqRes {
     private String message;
 
     // File info
-    private String fileName;
+    private String fileUrl;
     private byte[] fileContent;
 }

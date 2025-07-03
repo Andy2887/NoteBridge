@@ -28,6 +28,7 @@ public class AuthReqRes {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String profileUrl;
     
     // User object for responses
     private User user;

@@ -22,8 +22,8 @@ public class FilesController {
             if (!isValidImageFormat(file)) {
                 return createFailureResponse(400, "Invalid file format", "Only JPEG, JPG, and PNG image formats are allowed");
             }
-            String uniqueId = fileStorageService.uploadProfilePicture(file, userId);
-            return createSuccessResponse(200, "Profile picture uploaded successfully", uniqueId);
+            String url = fileStorageService.uploadProfilePicture(file, userId);
+            return createSuccessResponse(200, "Profile picture uploaded successfully", url);
         } catch (Exception e) {
             return createFailureResponse(500, "Internal Server Error", e.getMessage());
         }
@@ -37,23 +37,18 @@ public class FilesController {
             if (!isValidImageFormat(file)) {
                 return createFailureResponse(400, "Invalid file format", "Only JPEG, JPG, and PNG image formats are allowed");
             }
-            String uniqueId = fileStorageService.uploadLessonPicture(file, lessonId);
-            return createSuccessResponse(200, "Lesson picture uploaded successfully", uniqueId);
+            String url = fileStorageService.uploadLessonPicture(file, lessonId);
+            return createSuccessResponse(200, "Lesson picture uploaded successfully", url);
         } catch (Exception e) {
             return createFailureResponse(500, "Internal Server Error", e.getMessage());
         }
     }
 
-    @GetMapping("/retrieve/{fileUniqueId}")
-    public ResponseEntity<FilesReqRes> retrieveFile(@PathVariable String fileUniqueId) {
-        return ResponseEntity.ok(fileStorageService.retrieveFile(fileUniqueId));
-    }
-
-    private ResponseEntity<FilesReqRes> createSuccessResponse(int statusCode, String message, String fileName) {
+    private ResponseEntity<FilesReqRes> createSuccessResponse(int statusCode, String message, String fileUrl) {
         FilesReqRes response = new FilesReqRes();
         response.setStatusCode(statusCode);
         response.setMessage(message);
-        response.setFileName(fileName);
+        response.setFileUrl(fileUrl);
         return ResponseEntity.status(statusCode).body(response);
     }
 

@@ -26,6 +26,8 @@ public class Lesson {
     @Column(length = 1000)
     private String description;
 
+    private String imageUrl;
+
     // ONLINE, IN_PERSON, HYBRID
     @Column(nullable = false)
     private String location;
