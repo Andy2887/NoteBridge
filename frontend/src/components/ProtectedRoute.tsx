@@ -2,6 +2,7 @@
 import React from 'react';
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
+import UserService from '@/service/AuthService';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children, 
   requireAdmin = false 
 }) => {
-  const { isAuthenticated, isAdmin, loading } = useAuth();
+  const { loading } = useAuth();
 
   // Show loading state while checking authentication
   if (loading) {
@@ -27,12 +28,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Check if user is authenticated
-  if (!isAuthenticated) {
+  if (!UserService.isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
 
   // Check if admin access is required
-  if (requireAdmin && !isAdmin) {
+  if (requireAdmin && !UserService.isAuthenticated()) {
     return <Navigate to="/dashboard" replace />;
   }
 

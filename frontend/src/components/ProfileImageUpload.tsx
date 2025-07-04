@@ -297,15 +297,6 @@ const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
             >
               {isUploading ? "Uploading..." : "Save"}
             </Button>
-            {/* Debug info - remove in production */}
-            {process.env.NODE_ENV === 'development' && (
-              <div className="text-xs text-gray-500 mt-2">
-                Debug: croppedAreaPixels={croppedAreaPixels ? 'Yes' : 'No'}, 
-                userId={userId}, token={token ? 'Yes' : 'No'}
-                <br />
-                Button enabled: {!isUploading && croppedAreaPixels && userId !== undefined && userId !== null && token ? 'Yes' : 'No'}
-              </div>
-            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -25,11 +25,6 @@ interface AuthContextType {
     phoneNumber?: string;
   }) => Promise<void>;
   logout: () => void;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-  isStudent: boolean;
-  isTeacher: boolean;
-  refreshAuthState: () => void;
   loading: boolean;
 }
 
@@ -88,8 +83,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     UserService.setCurrentUser(user);
 
                     console.log("User set: ", user);
-                    
-                    refreshAuthState();
                 } else {
                     throw new Error(profileResponse.message || 'Failed to fetch user profile');
                 }
@@ -135,14 +128,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const logout = (): void => {
         UserService.logout();
         setUser(null);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-        setIsStudent(false);
-        setIsTeacher(false);
     };
 
     useEffect(() => {
-        refreshAuthState();
+        setUser(UserService.getCurrentUser());
         setLoading(false);
     }, []);
 
@@ -151,11 +140,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         login,
         register,
         logout,
-        isAuthenticated,
-        isAdmin,
-        isStudent,
-        isTeacher,
-        refreshAuthState,
         loading
     };
 
