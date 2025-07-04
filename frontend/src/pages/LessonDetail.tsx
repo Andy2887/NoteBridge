@@ -1,131 +1,90 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, User, Calendar, MessageCircle, Clock, MapPin, Link, Music } from "lucide-react";
-
-interface Lesson {
-  id: string;
-  title: string;
-  instructor: string;
-  instrument: string;
-  location: 'Hybrid' | 'In Person' | 'Online';
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
-  description: string;
-  address?: string;
-  meetingLink?: string;
-  image: string;
-}
-
-// Same mock data as Dashboard - in a real app this would come from an API
-const mockLessons: Lesson[] = [
-  {
-    id: '1',
-    title: 'Piano Fundamentals',
-    instructor: 'Sarah Johnson',
-    instrument: 'Piano',
-    location: 'In Person',
-    startDate: '2025-01-15',
-    endDate: '2025-03-15',
-    startTime: '2:00 PM',
-    endTime: '3:00 PM',
-    description: 'Learn the basics of piano playing including scales, chords, and simple melodies.',
-    address: '1847 Sheridan Rd, Evanston, IL 60208',
-    image: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=800&h=600&fit=crop&crop=center'
-  },
-  {
-    id: '2',
-    title: 'Guitar Fingerpicking',
-    instructor: 'Mike Chen',
-    instrument: 'Guitar',
-    location: 'Hybrid',
-    startDate: '2025-02-01',
-    endDate: '2025-04-01',
-    startTime: '3:00 PM',
-    endTime: '4:00 PM',
-    description: 'Master fingerpicking techniques for acoustic guitar with popular songs.',
-    address: '1847 Sheridan Rd, Evanston, IL 60208',
-    meetingLink: 'https://zoom.us/j/123456789',
-    image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&h=600&fit=crop&crop=center'
-  },
-  {
-    id: '3',
-    title: 'Violin for Beginners',
-    instructor: 'Emma Davis',
-    instrument: 'Violin',
-    location: 'In Person',
-    startDate: '2025-01-20',
-    endDate: '2025-03-20',
-    startTime: '1:00 PM',
-    endTime: '2:00 PM',
-    description: 'Start your violin journey with proper posture, bowing, and basic songs.',
-    address: '2120 Campus Dr, Evanston, IL 60208',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=center'
-  },
-  {
-    id: '4',
-    title: 'Jazz Piano Improvisation',
-    instructor: 'David Rodriguez',
-    instrument: 'Piano',
-    location: 'Online',
-    startDate: '2025-02-15',
-    endDate: '2025-05-15',
-    startTime: '7:00 PM',
-    endTime: '8:30 PM',
-    description: 'Explore jazz harmony and learn to improvise over standard progressions.',
-    meetingLink: 'https://meet.google.com/abc-defg-hij',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop&crop=center'
-  },
-  {
-    id: '5',
-    title: 'Drums: Rock Beats',
-    instructor: 'Alex Thompson',
-    instrument: 'Drums',
-    location: 'Hybrid',
-    startDate: '2025-01-10',
-    endDate: '2025-03-10',
-    startTime: '4:00 PM',
-    endTime: '5:00 PM',
-    description: 'Learn essential rock drum patterns and fills to play your favorite songs.',
-    address: '1800 Sherman Ave, Evanston, IL 60201',
-    meetingLink: 'https://teams.microsoft.com/l/meetup-join/19%3a123',
-    image: 'https://images.unsplash.com/photo-1571327073757-71d13c24de30?w=800&h=600&fit=crop&crop=center'
-  },
-  {
-    id: '6',
-    title: 'Classical Voice Training',
-    instructor: 'Maria Gonzalez',
-    instrument: 'Voice',
-    location: 'Online',
-    startDate: '2025-02-05',
-    endDate: '2025-04-05',
-    startTime: '6:00 PM',
-    endTime: '7:00 PM',
-    description: 'Develop proper breathing, posture, and vocal techniques for classical singing.',
-    meetingLink: 'https://zoom.us/j/987654321',
-    image: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&h=600&fit=crop&crop=center'
-  }
-];
+import { ArrowLeft, User, Calendar, MessageCircle, Clock, MapPin, Link, Music, Loader2 } from "lucide-react";
+import LessonsService, { Lesson } from "@/service/LessonsService";
 
 const LessonDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  const lesson = mockLessons.find(l => l.id === id);
-  
-  if (!lesson) {
+  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLesson = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+        
+        if (!id) {
+          throw new Error('No lesson ID provided');
+        }
+
+        const lessonId = parseInt(id);
+        if (isNaN(lessonId)) {
+          throw new Error('Invalid lesson ID');
+        }
+        
+        const response = await LessonsService.getLessonById(lessonId, token);
+        if (response.lesson) {
+          setLesson(response.lesson);
+        } else {
+          throw new Error('Lesson not found');
+        }
+      } catch (err) {
+        console.error('Error fetching lesson:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch lesson');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLesson();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+          <span className="text-lg text-gray-600">Loading lesson details...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !lesson) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6 text-center">
-            <h2 className="text-xl font-semibold mb-2">Lesson Not Found</h2>
-            <p className="text-gray-600 mb-4">The lesson you're looking for doesn't exist.</p>
-            <Button onClick={() => navigate('/dashboard')}>
-              Back to Dashboard
-            </Button>
+            <h2 className="text-xl font-semibold mb-2">
+              {error ? 'Error Loading Lesson' : 'Lesson Not Found'}
+            </h2>
+            <p className="text-gray-600 mb-4">
+              {error || "The lesson you're looking for doesn't exist."}
+            </p>
+            <div className="space-x-2">
+              <Button onClick={() => navigate('/dashboard')}>
+                Back to Dashboard
+              </Button>
+              {error && (
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  variant="outline"
+                >
+                  Retry
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -134,10 +93,19 @@ const LessonDetail = () => {
 
   const getLocationColor = (location: string) => {
     switch (location) {
-      case 'Hybrid': return 'bg-blue-100 text-blue-800';
-      case 'In Person': return 'bg-green-100 text-green-800';
-      case 'Online': return 'bg-purple-100 text-purple-800';
+      case 'HYBRID': return 'bg-blue-100 text-blue-800';
+      case 'IN_PERSON': return 'bg-green-100 text-green-800';
+      case 'ONLINE': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getLocationDisplayName = (location: string) => {
+    switch (location) {
+      case 'HYBRID': return 'Hybrid';
+      case 'IN_PERSON': return 'In Person';
+      case 'ONLINE': return 'Online';
+      default: return location;
     }
   };
 
@@ -168,22 +136,28 @@ const LessonDetail = () => {
                   <div>
                     <CardTitle className="text-3xl mb-2">{lesson.title}</CardTitle>
                     <CardDescription className="text-lg">
-                      Learn {lesson.instrument} with {lesson.instructor}
+                      Learn {lesson.instrument} with {lesson.teacher.firstName} {lesson.teacher.lastName}
                     </CardDescription>
                   </div>
                   <Badge className={getLocationColor(lesson.location)}>
-                    {lesson.location}
+                    {getLocationDisplayName(lesson.location)}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 {/* Course Image */}
                 <div className="mb-6">
-                  <img 
-                    src={lesson.image} 
-                    alt={`${lesson.title} course poster`}
-                    className="w-full h-64 object-cover rounded-lg shadow-md"
-                  />
+                  {lesson.imageUrl ? (
+                    <img 
+                      src={lesson.imageUrl} 
+                      alt={`${lesson.title} course poster`}
+                      className="w-full h-64 object-cover rounded-lg shadow-md"
+                    />
+                  ) : (
+                    <div className="w-full h-64 bg-gradient-to-br from-purple-100 to-orange-100 rounded-lg shadow-md flex items-center justify-center">
+                      <Music className="text-purple-300" size={64} />
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-6">
@@ -209,7 +183,9 @@ const LessonDetail = () => {
                     <User size={16} className="text-gray-500" />
                     <span className="text-sm text-gray-600">Instructor</span>
                   </div>
-                  <span className="font-medium">{lesson.instructor}</span>
+                  <span className="font-medium">
+                    {lesson.teacher.firstName} {lesson.teacher.lastName}
+                  </span>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -228,21 +204,25 @@ const LessonDetail = () => {
                   <span className="font-medium">{new Date(lesson.endDate).toLocaleDateString()}</span>
                 </div>
                 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Clock size={16} className="text-gray-500" />
-                    <span className="text-sm text-gray-600">Start Time</span>
+                {lesson.startTime && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Clock size={16} className="text-gray-500" />
+                      <span className="text-sm text-gray-600">Start Time</span>
+                    </div>
+                    <span className="font-medium">{new Date(lesson.startTime).toLocaleTimeString()}</span>
                   </div>
-                  <span className="font-medium">{lesson.startTime}</span>
-                </div>
+                )}
                 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Clock size={16} className="text-gray-500" />
-                    <span className="text-sm text-gray-600">End Time</span>
+                {lesson.endTime && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Clock size={16} className="text-gray-500" />
+                      <span className="text-sm text-gray-600">End Time</span>
+                    </div>
+                    <span className="font-medium">{new Date(lesson.endTime).toLocaleTimeString()}</span>
                   </div>
-                  <span className="font-medium">{lesson.endTime}</span>
-                </div>
+                )}
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -253,18 +233,18 @@ const LessonDetail = () => {
                 </div>
                 
                 {/* Address for In Person and Hybrid lessons */}
-                {(lesson.location === 'In Person' || lesson.location === 'Hybrid') && lesson.address && (
+                {(lesson.location === 'IN_PERSON' || lesson.location === 'HYBRID') && lesson.physicalAddress && (
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-2">
                       <MapPin size={16} className="text-gray-500 mt-0.5" />
                       <span className="text-sm text-gray-600">Address</span>
                     </div>
-                    <span className="font-medium text-right max-w-[60%]">{lesson.address}</span>
+                    <span className="font-medium text-right max-w-[60%]">{lesson.physicalAddress}</span>
                   </div>
                 )}
                 
                 {/* Meeting Link for Online and Hybrid lessons */}
-                {(lesson.location === 'Online' || lesson.location === 'Hybrid') && lesson.meetingLink && (
+                {(lesson.location === 'ONLINE' || lesson.location === 'HYBRID') && lesson.meetingLink && (
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Link size={16} className="text-gray-500" />
@@ -276,7 +256,7 @@ const LessonDetail = () => {
                       rel="noopener noreferrer"
                       className="font-medium text-purple-600 hover:text-purple-800 underline"
                     >
-                      Meeting Link
+                      Join Meeting
                     </a>
                   </div>
                 )}
