@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import LessonDetail from "./pages/LessonDetail";
+import CreateLesson from "./pages/CreateLesson";
 import Chat from "./pages/Chat";
 import Chats from "./pages/Chats";
 import UserSettings from "./pages/UserSettings";
@@ -59,6 +60,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <LessonDetail />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/create-lesson" 
+              element={
+                <ProtectedRoute requireTeacher>
+                  <CreateLesson />
                 </ProtectedRoute>
               } 
             />

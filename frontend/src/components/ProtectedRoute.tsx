@@ -7,11 +7,13 @@ import UserService from '@/service/AuthService';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireAdmin?: boolean;
+  requireTeacher?: boolean;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
-  requireAdmin = false 
+  requireAdmin = false,
+  requireTeacher = false
 }) => {
   const { loading } = useAuth();
 
@@ -33,7 +35,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Check if admin access is required
-  if (requireAdmin && !UserService.isAuthenticated()) {
+  if (requireAdmin && !UserService.isAdmin()) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Check if teacher access is required
+  if (requireTeacher && !UserService.isTeacher()) {
     return <Navigate to="/dashboard" replace />;
   }
 

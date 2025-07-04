@@ -142,7 +142,8 @@ const LessonDetail = () => {
   };
 
   const handleChatWithInstructor = () => {
-    navigate(`/chat/${lesson.id}`);
+    console.log("Chat function is disabled for now")
+    // navigate(`/chat/${lesson.id}`);
   };
 
   return (
@@ -275,7 +276,7 @@ const LessonDetail = () => {
                       rel="noopener noreferrer"
                       className="font-medium text-purple-600 hover:text-purple-800 underline"
                     >
-                      Join Meeting
+                      Meeting Link
                     </a>
                   </div>
                 )}

@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Music, Search, Clock, LogOut, User, Settings, MessageCircle } from "lucide-react";
+import { Music, Search, Clock, LogOut, User, Settings, MessageCircle, Plus } from "lucide-react";
+import UserService from "@/service/AuthService";
 
 interface Lesson {
   id: string;
@@ -121,18 +122,25 @@ const Dashboard = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Music className="text-purple-600" size={32} />
-            <h1 className="text-2xl font-bold text-gray-900">NoteBridge Dashboard</h1>
+            <h1 
+              className="text-2xl font-bold text-gray-900 cursor-pointer"
+              onClick={() => navigate('/')}
+            >
+              NoteBridge
+            </h1>
           </div>
           
           <div className="flex items-center space-x-4">
-            <Button 
-              onClick={() => navigate('/chats')}
-              variant="outline"
-              className="flex items-center space-x-2"
-            >
-              <MessageCircle size={16} />
-              <span>My Chats</span>
-            </Button>
+            {/* Teacher Create Lesson Button */}
+            {UserService.isTeacher() && (
+              <Button 
+                onClick={() => navigate('/create-lesson')}
+                className="bg-orange-600 hover:bg-orange-700 flex items-center space-x-2"
+              >
+                <Plus size={16} />
+                <span>Create Lesson</span>
+              </Button>
+            )}
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
