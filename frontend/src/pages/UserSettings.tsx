@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,8 +18,11 @@ import ProfileImageUpload from "@/components/ProfileImageUpload";
 import UserService from "@/service/AuthService";
 
 interface UserSettingsForm {
-  name: string;
-  email: string;
+  firstName: string;
+  lastName: string;
+  bio: string;
+  phoneNumber: string;
+  role: string;
   emailNotifications: boolean;
   marketingEmails: boolean;
   lessonReminders: boolean;
@@ -34,8 +39,11 @@ const UserSettings = () => {
 
   const form = useForm<UserSettingsForm>({
     defaultValues: {
-      name: `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || user?.email || "",
-      email: user?.email || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      bio: user?.bio || "",
+      phoneNumber: user?.phoneNumber || "",
+      role: user?.role || "",
       emailNotifications: true,
       marketingEmails: false,
       lessonReminders: true,
@@ -72,13 +80,38 @@ const UserSettings = () => {
   };
 
   const onSubmit = async (data: UserSettingsForm) => {
+    if (!user?.id || !token) {
+      toast.error("Authentication required");
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log("Saving user settings:", data);
-    toast.success("Settings saved successfully!");
-    setIsLoading(false);
+    try {
+      // Prepare user data for update (excluding notification preferences)
+      const userData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        bio: data.bio,
+        phoneNumber: data.phoneNumber,
+        role: data.role as 'STUDENT' | 'TEACHER' | 'ADMIN'
+      };
+
+      // Call the updateUser API
+      const response = await UserService.updateUser(user.id, userData, token);
+      
+      if (response.statusCode === 200) {
+        // Update the user profile after successful update
+        await updateUserProfile();
+        toast.success("Profile updated successfully!");
+      } else {
+        throw new Error(response.message || 'Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error("Failed to update profile");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLogout = () => {
@@ -124,8 +157,7 @@ const UserSettings = () => {
                   token={token}
                 />
                 <div className="mt-4">
-                  <CardTitle>{user?.firstName}</CardTitle>
-                  <CardDescription>{user?.email}</CardDescription>
+                  <CardTitle>{user?.firstName} {user?.lastName}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
@@ -166,12 +198,12 @@ const UserSettings = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="firstName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Full Name</FormLabel>
+                            <FormLabel>First Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter your full name" {...field} />
+                              <Input placeholder="Enter your first name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -180,17 +212,88 @@ const UserSettings = () => {
                       
                       <FormField
                         control={form.control}
-                        name="email"
+                        name="lastName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email Address</FormLabel>
+                            <FormLabel>Last Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter your email" type="email" {...field} />
+                              <Input placeholder="Enter your last name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="phoneNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter your phone number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="role"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            {user?.role === 'ADMIN' ? (
+                              <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
+                                Admin
+                              </div>
+                            ) : (
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select your role" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="STUDENT">Student</SelectItem>
+                                  <SelectItem value="TEACHER">Teacher</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            )}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="bio"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bio</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Tell us about yourself..." 
+                              className="resize-none"
+                              rows={4}
+                              {...field} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="border-t pt-4">
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <span className="font-medium">Email:</span>
+                        <span>{user?.email}</span>
+                        <span className="text-xs text-gray-500">(Email cannot be changed)</span>
+                      </div>
                     </div>
 
                     <Button type="submit" disabled={isLoading} className="w-full md:w-auto">
