@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import AuthenticatedRoute from "@/components/AuthenticatedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -27,8 +28,22 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route 
+              path="/login" 
+              element={
+                <AuthenticatedRoute>
+                  <Login />
+                </AuthenticatedRoute>
+              } 
+            />
+            <Route 
+              path="/register" 
+              element={
+                <AuthenticatedRoute>
+                  <Register />
+                </AuthenticatedRoute>
+              } 
+            />
             
             {/* Protected Routes */}
             <Route 
