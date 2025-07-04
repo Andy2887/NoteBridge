@@ -14,6 +14,7 @@ import com.notebridge.backend.repository.LessonsRepo;
 import com.notebridge.backend.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +50,7 @@ public class FilesService {
 
 
     @Transactional
+    @CacheEvict(value = "users", key = "#userId")
     public String uploadProfilePicture(MultipartFile file, Long userId) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty. Please upload a valid file.");

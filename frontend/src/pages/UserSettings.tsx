@@ -13,6 +13,7 @@ import { ArrowLeft, User, Bell, Shield, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import ProfileImageUpload from "@/components/ProfileImageUpload";
+import UserService from "@/service/AuthService";
 
 interface UserSettingsForm {
   name: string;
@@ -41,9 +42,33 @@ const UserSettings = () => {
     },
   });
 
-  const handleProfileImageUpdate = (newImageUrl: string) => {
+  const updateUserProfile = async () => {
+    if (!token) {
+      toast.error("Authentication required");
+      return;
+    }
+
+    try {
+      const response = await UserService.getProfile(token);
+      if (response.statusCode === 200 && response.user) {
+        // Update localStorage with the new user data
+        UserService.setCurrentUser(response.user);
+        // Update the profile image URL state with the latest data
+        setProfileImageUrl(response.user.profileUrl || "");
+        toast.success("Profile updated successfully!");
+      } else {
+        throw new Error(response.message || 'Failed to fetch updated profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error("Failed to update profile");
+    }
+  };
+
+  const handleProfileImageUpdate = async (newImageUrl: string) => {
     setProfileImageUrl(newImageUrl);
-    // Here you could also update the user context or make an API call to update user profile
+    // Update the user profile after image upload
+    await updateUserProfile();
   };
 
   const onSubmit = async (data: UserSettingsForm) => {

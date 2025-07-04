@@ -166,11 +166,11 @@ public class AuthService {
     }
 
     // Fetch user by ID
-    @Cacheable(value = "users", key = "#id")
-    public AuthReqRes getUserByID(Long id) {
+    @Cacheable(value = "users", key = "#userId")
+    public AuthReqRes getUserByID(Long userId) {
         AuthReqRes reqRes = new AuthReqRes();
         try {
-            User user = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+            User user = usersRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
             reqRes.setUser(user);
             reqRes.setStatusCode(200);
             reqRes.setMessage("User retrieved successfully");
