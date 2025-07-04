@@ -70,25 +70,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             
             // Check if login was successful based on status code and token
             if (response.statusCode === 200 && response.token) {
-                // Create a user object from the response data
-                const user = {
-                    id: 0, // Will be updated when we fetch profile
-                    email: email,
-                    role: response.role || 'STUDENT',
-                    firstName: response.firstName,
-                    lastName: response.lastName,
-                    bio: response.bio,
-                    phoneNumber: response.phoneNumber,
-                    profileUrl: response.profileUrl
-                };
-
+                // Store the token first
                 UserService.setTokens(
                     response.token,
                     response.refreshToken,
-                    response.role,
-                    user
+                    response.role
                 );
-                refreshAuthState();
+
+                // Now fetch the complete user profile using the token
+                const profileResponse = await UserService.getProfile(response.token);
+                
+                if (profileResponse.statusCode === 200 && profileResponse.user) {
+                    // Use the user object from the profile response
+                    const user = profileResponse.user;
+                    
+                    // Update localStorage with the complete user object
+                    UserService.setCurrentUser(user);
+
+                    console.log("User set: ", user);
+                    
+                    refreshAuthState();
+                } else {
+                    throw new Error(profileResponse.message || 'Failed to fetch user profile');
+                }
             } else {
                 throw new Error(response.message || 'Login failed');
             }

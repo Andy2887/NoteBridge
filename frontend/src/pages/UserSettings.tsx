@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, User, Bell, Shield, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import ProfileImageUpload from "@/components/ProfileImageUpload";
 
 interface UserSettingsForm {
   name: string;
@@ -25,6 +26,10 @@ const UserSettings = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState<string>(user?.profileUrl || "");
+
+  // Get token from localStorage (matching AuthContext pattern)
+  const token = localStorage.getItem('token') || "";
 
   const form = useForm<UserSettingsForm>({
     defaultValues: {
@@ -35,6 +40,11 @@ const UserSettings = () => {
       lessonReminders: true,
     },
   });
+
+  const handleProfileImageUpdate = (newImageUrl: string) => {
+    setProfileImageUrl(newImageUrl);
+    // Here you could also update the user context or make an API call to update user profile
+  };
 
   const onSubmit = async (data: UserSettingsForm) => {
     setIsLoading(true);
@@ -81,13 +91,17 @@ const UserSettings = () => {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader className="text-center pb-4">
-                <Avatar className="w-20 h-20 mx-auto mb-4">
-                  <AvatarFallback className="text-2xl">
-                    {user?.firstName?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <CardTitle>{user?.firstName}</CardTitle>
-                <CardDescription>{user?.email}</CardDescription>
+                <ProfileImageUpload
+                  currentImage={profileImageUrl}
+                  userInitials={user?.firstName?.charAt(0).toUpperCase() || "?"}
+                  onImageUpdate={handleProfileImageUpdate}
+                  userId={user?.id}
+                  token={token}
+                />
+                <div className="mt-4">
+                  <CardTitle>{user?.firstName}</CardTitle>
+                  <CardDescription>{user?.email}</CardDescription>
+                </div>
               </CardHeader>
               <CardContent>
                 <nav className="space-y-2">
