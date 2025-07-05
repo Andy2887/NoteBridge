@@ -2,14 +2,6 @@
 
 A comprehensive note-taking and lesson management application built with Spring Boot backend and modern web technologies.
 
-## Features
-
-- **User Authentication & Authorization**: Role-based security system with JWT tokens
-- **File Management**: Upload and manage profile pictures and lesson images with Firebase Storage
-- **Lesson Management**: Create and organize educational content
-- **Chat System**: Interactive messaging functionality
-- **Database Integration**: MySQL database with JPA/Hibernate
-
 ## Technology Stack
 
 ### Backend
@@ -21,12 +13,17 @@ A comprehensive note-taking and lesson management application built with Spring 
 - **Firebase Storage**: File storage solution
 - **JWT**: Token-based authentication
 
-### Key Components
-- User management with role-based access control
-- File upload system with organized storage (profile_pictures/, lesson_pictures/)
-- RESTful API endpoints
-- Database entities for Users, Lessons, Messages, Chats, and File metadata
-- Redis caching implementation for optimized data retrieval
+### Frontend
+- **React**: Frontend JavaScript library for building user interfaces
+- **TypeScript**: Type-safe JavaScript for better development experience
+- **Vite**: Fast build tool and development server
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **Shadcn/ui**: Modern UI component library built on Radix UI
+- **React Router**: Client-side routing for single-page application
+- **Axios**: HTTP client for API communication
+- **React Context API**: State management for authentication and global state
+- **React Hook Form**: Form handling and validation
+- **Lucide React**: Icon library for consistent iconography
 
 ## Project Structure
 
@@ -153,7 +150,7 @@ NoteBridge/
 4. Add Firebase service account key as a Secret File at `/etc/secrets/serviceAccountKey.json`
 5. Deploy using the included Dockerfile
 
-**Frontend (Vercel/Netlify)**
+**Frontend (Vercel)**
 1. Connect your GitHub repository
 2. Set build command: `npm run build`
 3. Set publish directory: `dist`
