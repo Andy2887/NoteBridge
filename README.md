@@ -31,17 +31,33 @@ A comprehensive note-taking and lesson management application built with Spring 
 ## Project Structure
 
 ```
-backend/
-├── src/main/java/com/notebridge/backend/
-│   ├── config/          # Configuration classes (CORS, Firebase, JWT, Security)
-│   ├── controller/      # REST controllers
-│   ├── dto/            # Data Transfer Objects
-│   ├── entity/         # JPA entities
-│   ├── repository/     # Data repositories
-│   └── service/        # Business logic services
-└── src/main/resources/
-    ├── application.properties
-    └── serviceAccountKey.json  # Firebase service account key
+NoteBridge/
+├── backend/                 # Spring Boot backend application
+│   ├── src/main/java/com/notebridge/backend/
+│   │   ├── config/          # Configuration classes (CORS, Firebase, JWT, Security, Redis)
+│   │   ├── controller/      # REST controllers for API endpoints
+│   │   ├── dto/            # Data Transfer Objects
+│   │   ├── entity/         # JPA entities (User, Lesson, Message, Chat, etc.)
+│   │   ├── repository/     # Data repositories with Redis caching
+│   │   └── service/        # Business logic services
+│   ├── src/main/resources/
+│   │   ├── application.properties    # Configuration properties
+│   │   └── serviceAccountKey.json   # Firebase service account key (excluded from git)
+│   ├── Dockerfile          # Docker configuration for deployment
+│   ├── pom.xml            # Maven dependencies and build configuration
+│   └── .env               # Environment variables (excluded from git)
+├── frontend/              # React frontend application
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/         # Application pages/routes
+│   │   ├── contexts/      # React contexts (Auth, etc.)
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── lib/           # Utility functions
+│   │   └── service/       # API service functions
+│   ├── public/            # Static assets
+│   ├── package.json       # Node.js dependencies
+│   └── vite.config.ts     # Vite configuration
+└── README.md              # Project documentation
 ```
 
 ## Getting Started
@@ -61,36 +77,87 @@ backend/
    cd NoteBridge
    ```
 
-2. **Configure Database**
-   - Create a MySQL database
-   - Update `application.properties` with your database credentials
+2. **Backend Setup**
+   ```bash
+   cd backend
+   ```
 
-3. **Configure Redis**
-   - Install and start Redis server
-   - Update `application.properties` with your Redis connection settings:
+3. **Configure Environment Variables**
+   - Create a `.env` file in the backend directory
+   - Add the following environment variables:
      ```properties
-     spring.cache.type=redis
-     spring.redis.host=localhost
-     spring.redis.port=6379
+     # JWT Configuration
+     JWT_SECRET=your-jwt-secret-key
+     
+     # Database Configuration
+     DB_URL=jdbc:mysql://localhost:3306/notebridge?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+     DB_USERNAME=your-db-username
+     DB_PASSWORD=your-db-password
+     
+     # Firebase Configuration
+     FIREBASE_PROJECT_ID=your-firebase-project-id
+     FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
+     
+     # Redis Configuration
+     REDIS_URL=redis://localhost:6379
      ```
 
 4. **Configure Firebase**
-   - Create a Firebase project
+   - Create a Firebase project at https://console.firebase.google.com/
    - Enable Firebase Storage
-   - Download the service account key and place it as `serviceAccountKey.json` in `src/main/resources/`
-   - Update the storage bucket name in `application.properties`
+   - Go to Project Settings → Service Accounts
+   - Generate a new private key and download the JSON file
+   - Place the JSON file as `serviceAccountKey.json` in `backend/src/main/resources/`
+   - **Important**: This file is excluded from git for security
 
-6. **Start Redis**
-   - You need to have Redis installed locally
-   ```bash
-   redis-server
-   ```
+5. **Setup Database**
+   - Install MySQL locally or use a cloud provider
+   - Create a database named `notebridge` (or update DB_URL accordingly)
+   - The application will automatically create tables on startup
 
-6. **Run the application**
+6. **Setup Redis**
+   - **Local Development**: Install Redis locally and start the server
+     ```bash
+     # macOS with Homebrew
+     brew install redis
+     redis-server
+     
+     # Ubuntu
+     sudo apt-get install redis-server
+     redis-server
+     ```
+   - **Production**: Use Redis Cloud or another cloud Redis provider
+   - Update the `REDIS_URL` in your `.env` file
+
+7. **Install Dependencies and Run Backend**
    ```bash
-   cd backend
+   mvn clean install
    mvn spring-boot:run
    ```
+   The backend will start on `http://localhost:8080`
+
+8. **Frontend Setup**
+   ```bash
+   cd ../frontend
+   npm install
+   npm run dev
+   ```
+   The frontend will start on `http://localhost:5173`
+
+### Deployment
+
+**Backend (Render)**
+1. Connect your GitHub repository to Render
+2. Create a new Web Service
+3. Set environment variables in Render dashboard
+4. Add Firebase service account key as a Secret File at `/etc/secrets/serviceAccountKey.json`
+5. Deploy using the included Dockerfile
+
+**Frontend (Vercel/Netlify)**
+1. Connect your GitHub repository
+2. Set build command: `npm run build`
+3. Set publish directory: `dist`
+4. Deploy automatically on push to main branch
 
 ## API Endpoints
 
