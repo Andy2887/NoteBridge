@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Configuration
 public class FirebaseConfig {
@@ -22,8 +26,7 @@ public class FirebaseConfig {
 
     @Bean
     FirebaseApp firebaseApp() throws IOException {
-        ClassPathResource resource = new ClassPathResource("serviceAccountKey.json");
-        InputStream serviceAccount = resource.getInputStream();
+        InputStream serviceAccount = getServiceAccountStream();
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setProjectId(projectId)
@@ -32,5 +35,17 @@ public class FirebaseConfig {
                 .build();
 
         return FirebaseApp.initializeApp(options);
+    }
+
+    private InputStream getServiceAccountStream() throws IOException {
+        // Try Render secrets file first (production)
+        Path secretsPath = Paths.get("/etc/secrets/serviceAccountKey.json");
+        if (Files.exists(secretsPath)) {
+            return new FileSystemResource(secretsPath.toFile()).getInputStream();
+        }
+        
+        // Fall back to classpath (development)
+        ClassPathResource resource = new ClassPathResource("serviceAccountKey.json");
+        return resource.getInputStream();
     }
 }
